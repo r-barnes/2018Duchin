@@ -1,0 +1,102 @@
+\documentclass{book} %preprint, review, authoryear
+%\documentclass[3p,number,sort&compress,twocolumn]{elsarticle} 
+\usepackage{titlesec}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{parskip}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+\usepackage{units}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{siunitx}
+\usepackage{makeidx}
+
+\makeindex
+
+\sisetup{round-mode = places}% in preamble    
+
+\usepackage{fancyhdr}
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyhead[L]{\sc Barnes}
+  \fancyhead[R]{\sc Networks Survey}
+  \cfoot{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}}
+\pagestyle{plain}
+
+\newcommand{\tscore}[1]{
+\raisebox{-.5\height}{
+\begin{tikzpicture}
+\draw (0,0)--(1,0);
+\filldraw[black] (#1,0) circle (0.05);
+\node at (0.5,-0.2) {\tiny \num[round-precision=2]{#1}};
+\end{tikzpicture}
+}
+}
+
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{}{0pt}{\Huge}
+
+\newcommand{\imtitle}[1]{\begin{center}#1\index{#1}\end{center}}
+\newcommand{\bchap}[1]{\chapter{#1}}
+
+\newcommand{\todo}[1]{\footnote{#1}}
+
+\hypersetup{
+  pdfauthor   = {Richard Barnes (ORCID: 0000-0002-0204-6040)},
+  pdftitle    = {District Census Networks},
+  pdfkeywords = {geographic information system (GIS), TODO},
+  pdfproducer = {LaTeX},
+  pdfcreator  = {pdfLaTeX}
+}
+
+%Favour layouts with figures tightly packed in
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
+
+\newcommand{\ssuf}[3]{#1#2$^{#3}$}
+
+\title{District Census Networks: A Survey}
+\author{Richard Barnes \\ rbar@berkeley.edu}
+\date{}
+
+\begin{document}
+\thispagestyle{empty}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\chapter{Introduction}
+
+\section{Methodology}
+
+In the following, a graph representation of neighbouring political units is extracted from census data. For each U.S.\ Congressional District, images are grouped into two rows of three columns. The columns, from left to right, are representations based on Census Tracts, Census Block Groups, and Census Blocks. The first row shows the political units, along with the boundary of their parent Congressional District. The second row shows only the graph representation.
+
+Since this document is a draft, I have in many cases omitted the Block representation, since plotting this is computationally expensive. Similarly, some Congressional Districts and states are missing entirely, presumably because my batch download processes did not acquire the needed source data.
+
+Data used to make this document were drawn from the United States Census
+Bureau's Cartographic/Line 2010 Shapefiles available at
+\url{https://www.census.gov/geo/maps-data/data/tiger-line.html}.
+
+Subunits (tracts, block groups, blocks) were paired with one or more parents (congressional districts) by first filtering by minimum bounding box overlaps and then calculating a polygon intersection.
+
+Neighbouring subunits were found by expanding subunit minimum bounding boxes by a small margin, filtering for overlapping boxes. The subunit borders were then densified and it was determined whether the subunits had a pair of points which were within a small distance of each other.
+
+Algorithms are available in CompactnessLib (\url{https://github.com/r-barnes/compactnesslib}).
+
+\newpage
+
+\input{dg_entries}
+
+\newpage
+
+\printindex
+
+
+\end{document}

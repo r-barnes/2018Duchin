@@ -1,0 +1,3 @@
+[submodule "compactnesslib"]
+	path = compactnesslib
+	url = git@github.com:r-barnes/compactnesslib.git
