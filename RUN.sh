@@ -28,7 +28,9 @@ if [ COMP_ENV == "RB_COMET" ]; then
   module load gcc/6.2.0 #Only needed on XSEDE
 fi
 
-make
+cd scripts
+make -j 4
+cd ..
 
 
 
