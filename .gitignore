@@ -1,3 +1,4 @@
+
 book/*.aux
 book/*.idx
 book/*.ilg
@@ -7,3 +8,5 @@ book/*.out
 book/*.pdf
 book/*.toc
 book/imgs
+*.o
+*.exe
