@@ -23,13 +23,13 @@ def ProcScores(geotype, sups, fileglob):
         sco['PARENTS']  = list(map(int,str(sco['PARENTS']).split(',')))
         sco['PARENTPR'] = list(map(float,str(sco['PARENTPR']).split(',')))
       else:
-        print('Unit with no parent!')
+        print('Unit {0} has no parent!'.format(sco['GEOID10']))
         sco['PARENTS']  = []
         sco['PARENTPR'] = []
     for sco in scores:
       for i,p in enumerate(sco['PARENTS']):
         data.append({
-          'parent':   sups[p]['properties']['GEOID'],
+          'parent':   sups[p]['properties']['GEOID10'],
           'external': sco['EXTCHILD'] == 'T',
           'per':      sco['PARENTPR'][i],
           'child':    sco['GEOID10'],
