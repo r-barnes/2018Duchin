@@ -139,5 +139,9 @@ for i, sub in enumerate(subs):
 
 for i, sup in enumerate(sups):
   print("Plotting {0} of {1}".format(i, len(sups)))
-  if len(sup['properties']['CHILDREN'])>0 and not os.path.exists(outputprefix + "-{0}-full.png".format(sup['properties']['GEOID10'])):
+  if len(sup['properties']['CHILDREN'])==0:
+    print("{0} had no children!".format(sup['properties']['GEOID10']))
+  elif os.path.exists(outputprefix + "-{0}-full.png".format(sup['properties']['GEOID10'])):
+    print("{0} already has a graph image!".format(sup['properties']['GEOID10']))
+  else:
     PlotDistricts(subs, sup, outputprefix + "-{0}".format(sup['properties']['GEOID10']))
