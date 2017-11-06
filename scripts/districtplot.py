@@ -54,24 +54,24 @@ def PlotDistricts(subs,sup,fileprefix):
   maxx = max(maxx,tmaxx)
   maxy = max(maxy,tmaxy) 
 
-  # #Plot the network and the units
-  # fig  = plt.figure()
-  # ax   = fig.add_subplot(1,1,1, aspect='equal')
-  # w, h = maxx - minx, maxy - miny
-  # ax.set_xlim(minx - 0.0 * w, maxx + 0.0 * w)
-  # ax.set_ylim(miny - 0.0 * h, maxy + 0.0 * h)
-  # ax.set_aspect(1)
-  # ax.axis('off')
-  # for c in sup['properties']['CHILDREN']:
-  #   patches = [PolygonPatch(p, ec="white", fc="#2BC7FF", alpha=1., zorder=1, fill=True) for p in subs[c]['geometry']]
-  #   ax.add_collection(PatchCollection(patches, match_original=True))
-  # PlotNetwork(ax, subs, sup) 
-  # patches = [PolygonPatch(p, ec='black', alpha=1., zorder=1, fill=False, linewidth=2) for p in sup['geometry']]
-  # ax.add_collection(PatchCollection(patches, match_original=True))  
-  # plt.savefig(fileprefix + "-full.png", alpha=True, dpi=300, bbox_inches='tight')
-  # plt.clf()
-  # plt.cla()
-  # plt.close()
+  #Plot the network and the units
+  fig  = plt.figure()
+  ax   = fig.add_subplot(1,1,1, aspect='equal')
+  w, h = maxx - minx, maxy - miny
+  ax.set_xlim(minx - 0.0 * w, maxx + 0.0 * w)
+  ax.set_ylim(miny - 0.0 * h, maxy + 0.0 * h)
+  ax.set_aspect(1)
+  ax.axis('off')
+  for c in sup['properties']['CHILDREN']:
+    patches = [PolygonPatch(p, ec="white", fc="#2BC7FF", alpha=1., zorder=1, fill=True) for p in subs[c]['geometry']]
+    ax.add_collection(PatchCollection(patches, match_original=True))
+  PlotNetwork(ax, subs, sup) 
+  patches = [PolygonPatch(p, ec='black', alpha=1., zorder=1, fill=False, linewidth=2) for p in sup['geometry']]
+  ax.add_collection(PatchCollection(patches, match_original=True))  
+  plt.savefig(fileprefix + "-full.png", alpha=True, dpi=300, bbox_inches='tight')
+  plt.clf()
+  plt.cla()
+  plt.close()
 
   #Plot just the network
   fig  = plt.figure()
