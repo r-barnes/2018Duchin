@@ -80,10 +80,29 @@ int main(int argc, char **argv) {
   gc_sub.clipperify();
 
   std::cout<<"Calculating parent overlaps..."<<std::endl;
-  CalcParentOverlap(gc_sub, gc_sup);
+  CalcParentOverlap(
+    gc_sub,
+    gc_sup,  
+    0.997,    //complete_inclusion_thresh
+    0.003,    //not_included_thresh
+    120       //edge_adjacency_dist      
+  );
+
+  // //Finds external children who still have 100% overlap with their parent
+  // std::cout<<"Finding external children..."<<std::endl;
+  // FindExternalChildren(
+  //   gc_sub,
+  //   gc_sup,
+  //   250,      //max_boundary_pt_dist
+  //   500       //edge_adjacency_dist  
+  // );
 
   std::cout<<"Finding neighbouring districts..."<<std::endl;
-  FindNeighbouringDistricts(gc_sub);
+  FindNeighbouringDistricts(
+    gc_sub,
+    100,  //max_neighbour_pt_dist
+    200   //expand_bb_by
+  );
 
 
   std::ofstream fout(out_sub_filename);
