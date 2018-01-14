@@ -8,6 +8,8 @@
 #include <iterator>
 
 int main(int argc, char **argv) {
+  Timer timer_overall;
+
   if(argc<7){
     std::cerr<<"Syntax: "<<argv[0]<<" -sub <Subunit File> -sup <Superunit File> -outsub <Output subunit file>"<<std::endl;
     return -1;
@@ -91,6 +93,8 @@ int main(int argc, char **argv) {
   //complib::CalculateAllBoundedScores(gc_sub, gc_sup, join_on);
   //complib::CalculateAllUnboundedScores(gc_sub);
   //complib::WriteShapefile(gc_sub,out_sub_filename);
+
+  std::cout<<"Overall time = "<<timer_overall.elapsed()<<" s"<<std::endl;
 
   return 0;
 }
