@@ -72,6 +72,9 @@ int main(int argc, char **argv) {
     );
   }
 
+
+  //Pre-build clipper paths for all of the subunits and superunits. These will
+  //be used to determine overlaps.
   std::cout<<"Clipperifying..."<<std::endl;
   gc_sup.clipperify();
   gc_sub.clipperify();
