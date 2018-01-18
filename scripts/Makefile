@@ -2,13 +2,14 @@ SOURCES = $(wildcard compactnesslib/*.cpp) $(wildcard compactnesslib/shapelib/*.
 OBJECTS = $(SOURCES:.cpp=.o)
 
 CXX_FLAGS = -I compactnesslib/lib --std=c++11 -march=native -mtune=native -g -O3 -DNDEBUG -DDOCTEST_CONFIG_DISABLE -Wall -Wpedantic -DSIDX_DLL='' #-fsanitize=address
+WARNINGS = -Wall -Wpedantic -pedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef
 LIBS = -fopenmp
 
 all: $(OBJECTS)
-	$(CXX) $(CXX_FLAGS) $(OBJECTS) -o net_compact.exe $(LIBS)
+	$(CXX) $(CXX_FLAGS) $(WARNINGS) $(OBJECTS) -o net_compact.exe $(LIBS)
 
 %.o: %.cpp
-	$(CXX) $(CXX_FLAGS) -c $< -o $@ $(LIBS)
+	$(CXX) $(CXX_FLAGS) $(WARNINGS) -c $< -o $@ $(LIBS)
 
 clean:
 	rm -rf compactness.exe compactnesslib/*.o compactnesslib/shapelib/*.o compactnesslib/lib/*.o *.o
