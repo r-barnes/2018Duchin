@@ -1,23 +1,26 @@
 #include "compactnesslib/compactnesslib.hpp"
 #include "Timer.hpp"
-#include <iostream>
 #include <fstream>
 #include <iomanip>
-#include <vector>
-#include <unordered_map>
+#include <iostream>
 #include <iterator>
+#include <stdexcept>
+#include <unordered_map>
+#include <vector>
 
 int main(int argc, char **argv) {
   Timer timer_overall;
 
-  if(argc<7){
-    std::cerr<<"Syntax: "<<argv[0]<<" -sub <Subunit File> -sup <Superunit File> -outsub <Output subunit file>"<<std::endl;
+  if(argc<8){
+    std::cerr<<"Syntax: "<<argv[0]<<" -sub <Subunit File> -sup <Superunit File> -outpre <Output prefix> -<shp/noshp>"<<std::endl;
     return -1;
   }
 
   std::vector<std::string> in_sub_filenames;
   std::vector<std::string> in_sup_filenames;
-  std::string out_sub_filename;
+  std::string output_prefix;
+
+  bool output_shapefile = false;
 
   int state = 0;
   for(int i=0;i<argc;i++){
@@ -27,10 +30,18 @@ int main(int argc, char **argv) {
     } else if(argv[i]==std::string("-sup")){
       state = 2;
       continue;
-    } else if(argv[i]==std::string("-outsub")){
+    } else if(argv[i]==std::string("-outpre")){
       state = 3;
       continue;
-    } 
+    } else if(argv[i]==std::string("-shp")){
+      output_shapefile = true;
+      state            = 0;
+      continue;
+    } else if(argv[i]==std::string("-noshp")){
+      output_shapefile = false;
+      state            = 0 ;
+      continue;
+    }
 
     switch(state){
       case 0: //Haven't found a command yet
@@ -42,8 +53,10 @@ int main(int argc, char **argv) {
         in_sup_filenames.emplace_back(argv[i]);
         break;
       case 3: //Collecting output file
-        out_sub_filename = argv[i];
+        output_prefix = argv[i];
         break;
+      default:
+        throw std::logic_error("Should not reach this point!");
     }
   }
 
@@ -104,17 +117,18 @@ int main(int argc, char **argv) {
     200   //expand_bb_by
   );
 
-
-  std::ofstream fout(out_sub_filename);
+  std::ofstream fout(output_prefix+".scores");
   for(const auto &sub: gc_sub){
     for(const auto &kv: sub.props)
       fout<<kv.first<<"="<<kv.second<<"~";
     fout<<std::endl;
   }
 
-  //complib::CalculateAllBoundedScores(gc_sub, gc_sup, join_on);
-  //complib::CalculateAllUnboundedScores(gc_sub);
-  //complib::WriteShapefile(gc_sub,out_sub_filename);
+  if(output_shapefile){
+    //complib::CalculateAllBoundedScores(gc_sub, gc_sup, join_on);
+    //complib::CalculateAllUnboundedScores(gc_sub);
+    complib::WriteShapefile(gc_sub,output_prefix);
+  }
 
   std::cout<<"Overall time = "<<timer_overall.elapsed()<<" s"<<std::endl;
 

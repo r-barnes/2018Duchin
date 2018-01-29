@@ -42,9 +42,9 @@ cd ..
 echo "4. Calculating scores"
 
 #2010 subunits, 2010 congressional districts
-ls $CENSUSDIR/tracts/*_reproj.shp       | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {} -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outsub {}.scores
-ls $CENSUSDIR/block_groups/*_reproj.shp | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {} -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outsub {}.scores
-ls $CENSUSDIR/blocks/*_reproj.shp*      | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {} -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outsub {}.scores
+ls $CENSUSDIR/tracts/*_reproj.shp       | sed 's/\.shp//' | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {}.shp -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outpre {}_out -shp
+ls $CENSUSDIR/block_groups/*_reproj.shp | sed 's/\.shp//' | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {}.shp -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outpre {}_out -noshp
+ls $CENSUSDIR/blocks/*_reproj.shp*      | sed 's/\.shp//' | xargs -t -n 1 -I {} ./scripts/net_compact.exe -sub {}.shp -sup $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp -outpre {}_out -noshp
 
 #2013 subunits, 2010 congressional districts
 #ls $CENSUSDIR/tracts/*_reproj.shp | xargs -n 1 -I {} $COMPACTNESSEXE -sub {} -sup $CENSUSDIR/cong_dist_2013/tl_2013_us_cd113_reproj.shp -outsub {}.2013scores
