@@ -51,30 +51,37 @@ sups         = [x for x in sup_fiona]
 
 
 dftract = ProcScores('tract',      sups, sys.argv[2])
-dfbg    = ProcScores('blockgroup', sups, sys.argv[3])
-dfblock = ProcScores('block',      sups, sys.argv[4])
+
+if sys.argv[3]!='-':
+  dfbg    = ProcScores('blockgroup', sups, sys.argv[3])
+else:
+  dfbg = pd.DataFrame()
+
+if sys.argv[4]!='-':
+  dfblock = ProcScores('block',      sups, sys.argv[4])
+else:
+  dfblock = pd.DataFrame()
 
 df = pd.concat([dftract, dfbg, dfblock], ignore_index=True)
 
-pickle.dump(df, open( "discrete_geom_2013score_ag.pickle", "wb" ) )
+#pickle.dump(df, open( "discrete_geom_2013score_ag.pickle", "wb" ) )
 
 df50         = df.loc[df['per']>0.5]
 df50         = df50.groupby(["parent","geotype","external"]).agg({'child':'count'}).reset_index()
 df50         = df50.pivot_table(index=['parent','geotype'], columns='external')
 df50.columns = df50.columns.droplevel().rename(None)
 df50         = df50.reset_index().fillna("null")
+df50         = df50.rename(columns={True: "Boundary50", False: "Interior50"})
 
 df10         = df.loc[df['per']>0.1]
 df10         = df10.groupby(["parent","geotype","external"]).agg({'child':'count'}).reset_index()
 df10         = df10.pivot_table(index=['parent','geotype'], columns='external')
 df10.columns = df10.columns.droplevel().rename(None)
 df10         = df10.reset_index().fillna("null")
+df10         = df10.rename(columns={True: "Boundary10", False: "Interior10"})
 
 df10 = pd.melt(df10, id_vars=['parent', 'geotype'])
 df50 = pd.melt(df50, id_vars=['parent', 'geotype'])
-
-df10 = df10.rename(columns={True: "Boundary10", False: "Interior10"})
-df50 = df50.rename(columns={True: "Boundary50", False: "Interior50"})
 
 #Merge into df10 for output
 df10['Interior50'] = df50['Interior50']
