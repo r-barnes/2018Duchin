@@ -10,3 +10,4 @@ book/*.toc
 book/imgs
 *.o
 *.exe
+*.pickle
