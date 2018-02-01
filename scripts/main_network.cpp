@@ -26,8 +26,8 @@ class Timer {
 int main(int argc, char **argv) {
   Timer timer_overall;
 
-  if(argc<8){
-    std::cerr<<"Syntax: "<<argv[0]<<" -sub <Subunit File> -sup <Superunit File> -outpre <Output prefix> -<shp/noshp>"<<std::endl;
+  if(argc<9){
+    std::cerr<<"Syntax: "<<argv[0]<<" -sub <Subunit File> -sup <Superunit File> -outpre <Output prefix> -<shp/noshp> -<printparent/noprintparent>"<<std::endl;
     return -1;
   }
 
@@ -36,6 +36,7 @@ int main(int argc, char **argv) {
   std::string output_prefix;
 
   bool output_shapefile = false;
+  bool print_parent     = false;
 
   int state = 0;
   for(int i=0;i<argc;i++){
@@ -55,6 +56,14 @@ int main(int argc, char **argv) {
     } else if(argv[i]==std::string("-noshp")){
       output_shapefile = false;
       state            = 0 ;
+      continue;
+    } else if(argv[i]==std::string("-printparent")){
+      print_parent = true;
+      state        = 0;
+      continue;
+    } else if(argv[i]==std::string("-noprintparent")){
+      print_parent = false;
+      state        = 0;
       continue;
     }
 
@@ -113,7 +122,8 @@ int main(int argc, char **argv) {
     gc_sup,  
     0.997,    //complete_inclusion_thresh
     0.003,    //not_included_thresh
-    120       //edge_adjacency_dist      
+    120,      //edge_adjacency_dist      
+    print_parent
   );
 
   // //Finds external children who still have 100% overlap with their parent
