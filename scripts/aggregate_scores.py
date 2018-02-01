@@ -144,5 +144,17 @@ dfout = dfout.rename(columns={'parent':'DistrictID'})
 
 dfout['DistrictName'] = dfout['DistrictID'].apply(lambda x: fips[x[0:2]] + ' District ' + x[2:])
 
-#Reorder columns
-dfout.to_csv(output_file, sep=",", index=None, quoting=csv.QUOTE_ALL)
+with open(output_file, "w") as fout:
+  fout.write(
+"""#Title:     Interior and Exterior subunit counts per U.S. Congressional District
+#Date:      {date}
+#Contact:   Richard Barnes (richard.barnes@berkeley.edu)
+#Email:     richard.barnes@berkeley.edu
+#Creators:  Richard Barnes (with help from Alejandro Velez-Arce)
+#Generator: Generated using "a044bfda210a4e3e5fe1392957fca5ca1c3bfd3f" or later from "https://github.com/r-barnes/2018Duchin"
+#Note:      Subunits are included if their area of intersection with a superunit exceeds a 50% or 10% threshold (see column names)
+#Note:      Geographic Boundary Data drawn from the US Census Tiger/LINE data.
+""".format(date=datetime.datetime.now().isoformat())
+)
+  #Reorder columns
+  dfout.to_csv(fout, sep=",", index=None, quoting=csv.QUOTE_ALL)
