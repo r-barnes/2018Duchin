@@ -1,5 +1,5 @@
 #include "compactnesslib/compactnesslib.hpp"
-#include "Timer.hpp"
+#include <chrono>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -7,6 +7,21 @@
 #include <stdexcept>
 #include <unordered_map>
 #include <vector>
+
+
+
+class Timer {
+ private:
+  typedef std::chrono::high_resolution_clock clock;
+  typedef std::chrono::duration<double, std::ratio<1> > second;
+  std::chrono::time_point<clock> start_time;
+ public:
+  Timer()        { start_time = clock::now(); }
+  void reset()   { start_time = clock::now(); }
+  double elapsed() const { return std::chrono::duration_cast<second> (clock::now() - start_time).count(); }
+};
+
+
 
 int main(int argc, char **argv) {
   Timer timer_overall;
