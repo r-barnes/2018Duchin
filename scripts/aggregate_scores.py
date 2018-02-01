@@ -43,9 +43,11 @@ def ProcScores(geotype, sups, fileglob):
   return df
 
 
-if len(sys.argv)!=5:
-  print("Syntax: {0} <Parents File> <Tract Scores> <Block Group Scores> <Block Scores>".format(sys.argv[0]))
+if len(sys.argv)!=6:
+  print("Syntax: {0} <Parents File> <Tract Scores> <Block Group Scores> <Block Scores> <Output File>".format(sys.argv[0]))
   sys.exit(-1)
+
+output_file = sys.argv[5]
 
 print("Loading superunits...")
 sup_filename = sys.argv[1]
@@ -68,7 +70,7 @@ else:
 
 df = pd.concat([dftract, dfbg, dfblock], ignore_index=True)
 
-#pickle.dump(df, open( "discrete_geom_2013score_ag.pickle", "wb" ) )
+pickle.dump(df, open( "aggregate-score-intermediate-dataframe.pickle", "wb" ) )
 
 df50         = df.loc[df['per']>0.5]
 df50         = df50.groupby(["parent","geotype","external"]).agg({'child':'count'}).reset_index()
@@ -89,9 +91,6 @@ df10['Interior50'] = df50['Interior50']
 df10['Boundary50'] = df50['Boundary50']
 
 df10 = df10.rename(columns={'parent':'DistrictID'})
-
-# df10 = pd.melt(df10, id_vars=['parent', 'geotype'])
-# df50 = pd.melt(df50, id_vars=['parent', 'geotype'])
 
 dfint10 = df10[['DistrictID','geotype','Interior10']]
 dfint10 = dfint10.pivot(index='DistrictID', columns='geotype', values='Interior10')
@@ -125,5 +124,4 @@ df_final['DistrictName'] = df_final['DistrictID'].apply(lambda x: fips[x[0:2]] +
 columns = ['DistrictID', 'DistrictName', 'TractInterior10','TractBoundary10','TractInterior50','TractBoundary50','BGInterior10','BGBoundary10','BGInterior50','BGBoundary50','BlockInterior10','BlockBoundary10','BlockInterior50','BlockBoundary50']
 df_final = df_final[columns]
 
-
-df_final.to_csv("20180131-moon-output.csv", sep=",", index=None, columns=columns, quoting=csv.QUOTE_ALL)
+df_final.to_csv(output_file, sep=",", index=None, columns=columns, quoting=csv.QUOTE_ALL)
