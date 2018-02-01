@@ -1,18 +1,25 @@
-COMP_ENV="RB_LOCAL"
-
 echo "1. Choose environment '$COMP_ENV'"
+
+#This script assumes that an environment variable COMP_ENV has been set. The
+#script chooses directories and compilers based on the value of this variable.
 
 if [ COMP_ENV == "RB_LOCAL" ]; then #RB's local machine
   export CENSUSDIR=/home/rick/data/gis/census
 elif [ COMP_ENV == "RB_COMET" ]; then
   #Comet supercomputer
-  export CENSUSDIR=/home/rbarnes1/scratch/census
+  export CENSUSDIR=/home/rbarnes1/scratch/census2
 else
-  echo "Unrecognised environment! Quitting."
+  echo "Unrecognised environment! You should edit RUN.sh to match your machine!"
   exit 1
 fi
 
 
+
+echo "2. Acquiring data"
+
+wget --continue --no-directories --directory-prefix=$CENSUSDIR -i data_files
+
+exit 0
 
 echo "2. Converting shapefiles from WGS84 into a conterminous AEA projection..."
 
@@ -58,25 +65,6 @@ ls $CENSUSDIR/blocks/*_reproj.shp*      | sed 's/\.shp//' | shuf | head -n 3 | x
 
 
 
-echo "5. Building imagery"
-
-mkdir -p book/imgs
-ls $CENSUSDIR/tracts/*_reproj.shp       | xargs -P 10 -n 1 -I {} ./scripts/districtplot.py {} $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp {}.scores book/imgs/tract
-ls $CENSUSDIR/block_groups/*_reproj.shp | xargs -P 10 -n 1 -I {} ./scripts/districtplot.py {} $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp {}.scores book/imgs/blockgroup
-ls $CENSUSDIR/blocks/*_reproj.shp       | xargs -P 10 -n 1 -I {} ./scripts/districtplot.py {} $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp {}.scores book/imgs/block
-
-
-
-echo "6. Shrinking imagery"
-ls book/imgs/*png | sed 's/.png//' | xargs -P 24 -I {} convert -resize 300x250 {}.png {}_shrunk.png
-
-
-
-echo "7. Compacting imagery"
-ls book/imgs/*_shrunk.png | xargs -P 24 -I {} optipng -o5 -strip all {}
-
-
-
 echo "8. Aggregating scores"
 mkdir -p results/
 #2010 subunits, 2010 congressional districts
@@ -85,6 +73,13 @@ python3 -i ./scripts/aggregate_scores.py $CENSUSDIR/congressional_districts/tl_2
 #2013 subunits, 2010 congressional districts
 #python3 -i ./aggregate_scores.py $CENSUSDIR/cong_dist_2013/tl_2013_us_cd113_reproj.shp '$CENSUSDIR/tracts/*.2013scores' '$CENSUSDIR/block_groups/*.2013scores' '$CENSUSDIR/blocks/*.2013scores'
 
-echo "9. Building book"
 
-./scripts/build_book.py
+
+
+wget --continue -r --no-parent -e robots=off 'https://www2.census.gov/geo/tiger/TIGER2010BLKPOPHU/'
+
+
+
+
+
+
