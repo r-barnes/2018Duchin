@@ -181,3 +181,17 @@ areas.
     ZCTA **                                     ZCTA                             5                 Suitland, MD ZCTA                                                                                                              20746
     * The block group code is not included in the census block GEOID code because the first digit of a census block code represents the block group code.
     ** ZIP Code Tabulation Areas (ZCTAs) are generalized areal representations of United States Postal Service (USPS) ZIP Code service areas.
+
+
+
+Credits
+=======
+
+Outputs were generated using XSEDE's Comet supercomputer, which is supported by
+National Science Foundation grant number ACI-1053575 and was available to RB
+through the National Science Foudnation's Graduate Research Fellowship. RB was
+supported by the Department of Energy's Computational Science Graduate
+Fellowship (Grant No. DE-FG02-97ER25308). Travel funding for RB was provided by
+the Metric Geometry and Gerrymandering Group. RB's laptop, on which development
+took place, was provided by Adam Clark. In-kind support was provided by Isaac
+B., Hannah J., Vivian L., and Jerry W.
