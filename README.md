@@ -148,7 +148,7 @@ Step 6: Aggregate the scores to generate numbers
     mkdir -p results/
     python3 -i ./scripts/aggregate_scores.py $CENSUSDIR/congressional_districts/tl_2010_us_cd111_reproj.shp '$CENSUSDIR/tracts/*.scores' '$CENSUSDIR/block_groups/*.scores' '$CENSUSDIR/blocks/*.scores' $CENSUSDIR/popdata/popdata.csv aggregate-results.csv
 
-The output is a file called 
+In this case, the output is a file called `aggregate-results.csv`.
 
 
 
